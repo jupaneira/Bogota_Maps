@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<style>
+
+    .localidades {
+        fill-opacity: 0.80;
+    }
+
+
+    .localidad-boundary {
+        fill: none;
+        stroke: #fff;
+        pointer-events: none;
+    }
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script>
+
+    var width = 1000,
+            height = 950;
+
+    var rotate = [-74.2, 4.3, 0];
+    var projection = d3.geo.mercator()
+            .rotate([74.2, -4.3, 0.0])
+            .scale(41000)
+            .translate([width / 2, height / 2]);
+
+    var path = d3.geo.path()
+            .projection(projection);
+
+    var color = d3.scale.category10();
+
+
+    var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+    d3.json("bta_localidades.json", function (error, mapData) {
+        var localidades = topojson.feature(mapData, mapData.objects.bta_localidades).features,
+                neighbors = topojson.neighbors(mapData.objects.bta_localidades.geometries);
+
+        svg.append("g")
+                .attr("class", "localidades")
+                .selectAll("path")
+                .data(localidades)
+                .enter().append("path")
+                .attr("d", path)
+                .style("fill", function (d, i) {
+                    return color(d.color = d3.max(neighbors[i], function (n) {
+                                return localidades[n].color;
+                            }) + 1 | 0);
+                })
+                .on('mouseover', function (d) {
+                    d3.select(this).style('fill-opacity', 1);
+                })
+                .on('mouseout', function (d) {
+                    d3.select(this).style('fill-opacity', 0.80);
+                })
+                .append("title")
+                .text(function (d) {
+                    return d.properties.NOMBRE;
+                });
+
+        svg.append("path")
+                .datum(topojson.mesh(mapData, mapData.objects.bta_localidades, function (a, b) {
+                    return a.properties.NOMBRE != b.properties.NOMBRE;
+                }))
+                .attr("class", "localidad-boundary")
+                .attr("d", path);
+    });
+
+    d3.select(self.frameElement).style("height", height + "px");
+</script>
+</body>
+</html>
