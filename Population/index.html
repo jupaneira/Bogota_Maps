@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<style>
+
+    .localidades {
+        fill-opacity: 0.80;
+        stroke: black;
+        stroke-width: .5px;
+    }
+
+    .localidad-boundary {
+        fill: none;
+        stroke: #333;
+        stroke-width: .5px;
+    }
+
+    .key path {
+        display: none;
+    }
+
+    .caption {
+        font-weight: bold;
+    }
+
+</style>
+<body>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script>
+
+    var width = 1300,
+            height = 950;
+
+    var formatNumber = d3.format("s");
+
+    var projection = d3.geo.mercator()
+            .rotate([74.1, -4.54, 90.0])
+            .scale(110000)
+            .translate([width / 2, height / 2]);
+
+    var path = d3.geo.path()
+            .projection(projection);
+
+    var svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+
+    var color = d3.scale.threshold()
+            .domain([10000, 100000, 200000, 400000, 600000, 800000, 1000000, 1200000, 1400000])
+            .range(["#B0E8DF", "#9ACCDB", "#84B1D7", "#6E96D3", "#587BCF", "#425FCB", "#2C44C7", "#1629C3", "000EBF"]);
+
+    var x = d3.scale.linear()
+            .domain([24088, 1218513])
+            .range([0,500]);
+
+    var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickSize(13)
+            .tickValues(color.domain())
+            .tickFormat(function (d) {
+                return formatNumber(d);
+            });
+
+    var g = svg.append("g")
+            .attr("class", "key")
+            .attr("transform", "translate(" + 40 + "," + 40 + ")");
+
+    g.selectAll("rect")
+            .data(color.range().map(function (currentColor) {
+                var d = color.invertExtent(currentColor);
+                if (d[0] == null) d[0] = x.domain()[0];
+                if (d[1] == null) d[1] = x.domain()[1];
+                return d;
+            }))
+            .enter().append("rect")
+            .attr("height", 8)
+            .attr("x", function (d) {
+                return x(d[0]);
+            })
+            .attr("width", function (d) {
+                return x(d[1]) - x(d[0]);
+            })
+            .style("fill", function (d) {
+                return color(d[0]);
+            });
+
+    g.call(xAxis).append("text")
+            .attr("class", "caption")
+            .attr("y", -10)
+            .text("Population");
+
+    queue()
+            .defer(d3.json, "bta_localidades.json")
+            .defer(d3.csv, "population.csv")
+            .await(ready);
+
+
+    function ready(error, bta_localidades, population) {
+
+        if (error) throw error;
+
+        var localidades = topojson.feature(bta_localidades, bta_localidades.objects.bta_localidades).features,
+                neighbors = topojson.neighbors(bta_localidades.objects.bta_localidades.geometries);
+
+        svg.append("g")
+                .attr("class", "localidades")
+                .selectAll("path")
+                .data(localidades)
+                .enter().append("path")
+                .attr("d", path)
+                .style("fill", function (localidad) {
+                    var paringData = population.filter(function (p) {
+                        return localidad.properties.NOMBRE === p.name;
+                    })[0];
+                    return paringData ? color(paringData.population) : color(0);
+                })
+                .on('mouseover', function (d) {
+                    d3.select(this).style('stroke-width', 1.7);
+                })
+                .on('mouseout', function (d) {
+                    d3.select(this).style('stroke-width', .5);
+                })
+                .append("title")
+                .text(function (localidad) {
+                    var pop = population.filter(function (p) {
+                        return localidad.properties.NOMBRE === p.name;
+                    })[0];
+                    return localidad.properties.NOMBRE + ": " + pop.population;
+                });
+
+        svg.append("path")
+                .datum(topojson.mesh(bta_localidades, bta_localidades.objects.bta_localidades, function (a, b) {
+                    return a.properties.NOMBRE != b.properties.NOMBRE;
+                }))
+                .attr("class", "localidad-boundary")
+                .attr("d", path);
+    }
+    ;
+
+    d3.select(self.frameElement).style("height", height + "px");
+</script>
+</body>
+</html>
