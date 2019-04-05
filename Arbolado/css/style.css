@@ -1,0 +1,82 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+.nextline {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+#meme {
+  font-family: "Bookman";
+}
+
+.nextline {
+  font-family: "Times New Roman";
+}
+
+#container {
+  position: absolute;
+  top: 5%;
+  left: 2%;
+  width: 17%;
+  opacity: 0.55;
+  opacity: 0.95;
+  overflow: auto;
+  padding: 10px 10px 10px 10px;
+  font-size: 18px;
+  color: #151515;
+  border-radius: 10px;
+  z-index: 2;
+}
+
+#intro {
+  width: 95%;
+  background: #f6f6f6;
+  opacity: 0.95;
+  overflow: auto;
+  padding: 10px 10px 10px 10px;
+  font-size: 18px;
+  color: #151515;
+  border-radius: 10px;
+}
+
+#menu {
+  width: 100%;
+  opacity: 0.9;
+  overflow: auto;
+  padding: 15px 15px 15px 15px;
+  font-size: 16px;
+  color: #151515;
+  border-radius: 5px;
+  z-index: 2;
+}
+
+.map-overlay {
+  font: "Helvetica Neue", Arial, Helvetica, sans-serif;
+  background-color: #fff;
+  opacity: 0.9;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  width: 94%;
+  padding: 10px;
+  display: none;
+}
+
+#credit {
+  position: absolute;
+  bottom: 20px;
+  right: 0;
+  background: #ccc;
+  font-size: 13px;
+  padding: 2px 3px 2px 5px;
+  color: #555;
+  z-index: 2;
+}
