@@ -14,6 +14,6 @@ $ csvjson --lat lat --lon lon --crs EPSG:4269 --indent 4 arbolado-bogota-codes.c
 
    **Fuente**: https://github.com/GISupportICRC/ArcGIS2Mapbox#installing-tippecanoe-on-windows
 ```sh
-$ tippecanoe -o arbolado-bog.mbtiles arbolado-bogota-codes.json    arbolado-bogota-codes.json
+$ tippecanoe -o arbolado-bog.mbtiles arbolado-bogota-codes.json
 ```
 4. Generación Mapa
