@@ -1,0 +1,21 @@
+[
+  { "codigo": 1.0, "nombre": "Usaquén" },
+  { "codigo": 2.0, "nombre": "Chapinero" },
+  { "codigo": 3.0, "nombre": "Santa Fe" },
+  { "codigo": 4.0, "nombre": "San Cristóbal" },
+  { "codigo": 5.0, "nombre": "Usme" },
+  { "codigo": 6.0, "nombre": "Tunjuelito" },
+  { "codigo": 7.0, "nombre": "Bosa" },
+  { "codigo": 8.0, "nombre": "Kennedy" },
+  { "codigo": 9.0, "nombre": "Fontibón" },
+  { "codigo": 10.0, "nombre": "Engativá" },
+  { "codigo": 11.0, "nombre": "Suba" },
+  { "codigo": 12.0, "nombre": "Barrios Unidos" },
+  { "codigo": 13.0, "nombre": "Teusaquillo" },
+  { "codigo": 14.0, "nombre": "Los Mártires" },
+  { "codigo": 15.0, "nombre": "Antonio Nariño" },
+  { "codigo": 16.0, "nombre": "Puente Aranda" },
+  { "codigo": 17.0, "nombre": "La Candelaria" },
+  { "codigo": 18.0, "nombre": "Rafael Uribe Uribe" },
+  { "codigo": 19.0, "nombre": "Ciudad Bolívar" }
+]

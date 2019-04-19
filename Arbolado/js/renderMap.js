@@ -1,3 +1,24 @@
+// LOAD DATA SETS
+let arboladoDataSet;
+let localidadesDataSet;
+
+$.getJSON("/data/arbolado.json", function(json) {
+  arboladoDataSet = json;
+});
+
+$.getJSON("/data/localidades.json", function(json) {
+  localidadesDataSet = json;
+});
+
+function getName(dataSet, code) {
+  return dataSet.filter(entity => entity.codigo == code)[0].nombre;
+}
+
+function getCode(dataSet, name) {
+  return dataSet.filter(entity => entity.nombre == name)[0].codigo;
+}
+
+// MAP RENDERING
 mapboxgl.accessToken =
   "pk.eyJ1IjoianBuZWlyYWMxIiwiYSI6ImNpaDR0OXdjeDB6bnY2NW0wMWZ2M2NmdGwifQ.xhT0KEgd7tca3Ris39Yyqw";
 
@@ -31,39 +52,37 @@ var colors = [];
 while (colors.length < 296) {
   colors.push(getRandomColor());
 }
-colors[252] = "#00BF6F";
+colors[254] = "#00BF6F";
 colors[10] = "#2BC500";
-colors[153] = "#CCC600";
+colors[155] = "#CCC600";
 colors[8] = "#D22300";
-colors[284] = "#D9008A";
-colors[86] = "#7C00E0";
-colors[107] = "#D7AA08";
+colors[286] = "#D9008A";
+colors[89] = "#7C00E0";
+colors[110] = "#D7AA08";
 colors[5] = "#D8B508";
-colors[149] = "#D8BF08";
-colors[141] = "#D9CA08";
-colors[72] = "#D9D508";
-colors[64] = "#D4DA09";
-colors[113] = "#CADA09";
-colors[215] = "#C0DB09";
-colors[137] = "#B6DB09";
-colors[34] = "#ACDC0A";
-colors[66] = "#A2DC0A";
-colors[61] = "#98DD0A";
-colors[69] = "#8EDD0A";
-colors[114] = "orange";
-colors[94] = "#7ADE0B";
-colors[47] = "#70DF0B";
-colors[92] = "#66DF0B";
-colors[19] = "#5CE00B";
-colors[274] = "#52E00B";
-colors[26] = "#48E10C";
-colors[281] = "#3DE10C";
-colors[232] = "#33E20C";
-colors[70] = "#29E20C";
-colors[251] = "#1FE30D";
-colors[242] = "red";
-
-console.log(colors);
+colors[152] = "#D8BF08";
+colors[144] = "#D9CA08";
+colors[76] = "#D9D508";
+colors[68] = "#D4DA09";
+colors[116] = "#CADA09";
+colors[217] = "#C0DB09";
+colors[142] = "#B6DB09";
+colors[37] = "#ACDC0A";
+colors[70] = "#A2DC0A";
+colors[65] = "#98DD0A";
+colors[73] = "#8EDD0A";
+colors[117] = "orange";
+colors[97] = "#7ADE0B";
+colors[51] = "#70DF0B";
+colors[95] = "#66DF0B";
+colors[20] = "#5CE00B";
+colors[277] = "#52E00B";
+colors[27] = "#48E10C";
+colors[284] = "#3DE10C";
+colors[234] = "#33E20C";
+colors[74] = "#29E20C";
+colors[253] = "#1FE30D";
+colors[244] = "white";
 
 map.on("load", function() {
   map.addLayer({
@@ -71,9 +90,9 @@ map.on("load", function() {
     type: "circle",
     source: {
       type: "vector",
-      url: "mapbox://jpneirac1.dzmy3cmz"
+      url: "mapbox://jpneirac1.atibkeml"
     },
-    "source-layer": "arboladobogotacodes",
+    "source-layer": "arboladobogotadepuradocodes",
     paint: {
       // make circles larger as the user zooms from z12 to z22
       "circle-radius": {
@@ -91,40 +110,61 @@ map.on("load", function() {
   map.on("click", "trees", function(e) {
     new mapboxgl.Popup()
       .setLngLat(e.lngLat)
-      .setHTML(getName(e.features[0].properties["tree-code"]))
+      .setHTML(
+        "<b>Especie: </b>" +
+          getName(arboladoDataSet, e.features[0].properties["tree-code"]) +
+          "</br>" +
+          "<b>Altura: </b>" +
+          e.features[0].properties["ALTURA_TOT"] +
+          " mts"
+      )
       .addTo(map);
   });
 });
 
-let data;
-$.getJSON("/data/arbolado.json", function(json) {
-  data = json; // this will show the info it in firebug console
-});
-
-function getName(code) {
-  return data.filter(tree => tree.codigo == code)[0].nombre;
+function getFilter(fieldName, fieldValue, dataSet) {
+  return fieldValue == "Ver Todos"
+    ? ["!in", fieldName, ""]
+    : [
+        "in",
+        fieldName,
+        getCode(dataSet, fieldValue)
+          .toString()
+          .concat(fieldName == "CODIGO_LOC" ? ".0" : "")
+      ];
 }
 
-function getCode(name) {
-  return data.filter(tree => tree.nombre == name)[0].codigo;
-}
+function filterByFeatures() {
+  let filter1, filter2;
 
-function olew(name) {
-  if (name == "Ver Todos") {
-    map.setFilter("trees", ["!in", "tree-code", ""]);
-    return;
-  }
-  let code = getCode(name).toString();
+  let especiesMenu = document.getElementById("especiesMenu");
+  let especie = especiesMenu.options[especiesMenu.selectedIndex].text;
+  filter1 = getFilter("tree-code", especie, arboladoDataSet);
+
+  let localidadMenu = document.getElementById("localidadesMenu");
+  let localidad = localidadMenu.options[localidadMenu.selectedIndex].text;
+  filter2 = getFilter("CODIGO_LOC", localidad, localidadesDataSet);
 
   // Render found features in an overlay.
   overlay.innerHTML = "";
 
   var title = document.createElement("strong");
-  title.textContent = name;
+  // title.textContent = "Holly Liso";
+
+  var imagen = document.createElement("img");
+  imagen.setAttribute("src", "images/" + especie + ".png");
+  imagen.setAttribute("id", "arbolito");
 
   overlay.appendChild(title);
+  overlay.appendChild(imagen);
+
   overlay.style.display = "block";
 
   // Add features that share the same county name to the highlighted layer.
-  map.setFilter("trees", ["in", "tree-code", code]);
+  map.setFilter("trees", ["all", filter1, filter2]);
+}
+
+function changeAltura(value) {
+  let altura = document.getElementById("alturaRangee");
+  altura.innerText = "Altura ( < ".concat(value).concat(" mts)");
 }

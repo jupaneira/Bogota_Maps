@@ -15,50 +15,78 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="css/style.css"></link>
+    <style>
+       img { 
+                width:70%; 
+                height:70%; 
+            } 
+    </style>
   </head>
   <body>
     <div id="container">
       <div id="intro">
-        <h1>
-          <div class="nextline">Arbolado Urbano de Bogotá</div>
-        </h1>
-        <p id="meme">
-          Bogotá cuenta con más de 290 especies de árboles plantados a lo largo de
-          todo su territorio.<br /><a href="/blog/nyctrees">Read more.</a>
-        </p>
-      </div> <br/>
-      <select id="menu" onchange="olew(this.options[this.selectedIndex].text)">
+        <center>
+          <img src="Bogodata.png"/>
+          <h1>
+            <div class="nextline">Arbolado Urbano de Bogotá</div>
+          </h1>
+        </center>
+        <!-- <p id="meme"> -->
+          <!-- Bogotá cuenta con más de 290 especies de árboles plantados a lo largo de -->
+          <!-- todo su territorio.<br /><a href="/blog/nyctrees">Read more.</a> -->
+        <!-- </p> -->
+      </div>
+      <h1 class="section">Especie</h1>
+      <select id="especiesMenu" onchange="filterByFeatures()">
         <option value="option1">Ver Todos</option>
         <option value="option1">Sauco</option>
-        <option value="option2">Acacia negra</option>
-        <option value="option3">Jazmín del cabo</option>
+        <option value="option2">Acacia negra, gris</option>
+        <option value="option3">Jazmin del cabo, laurel huesito</option>
         <option value="option3">Acacia japonesa</option>
-        <option value="option3">Urapán</option>
-        <option value="option3">Ciprés</option>
-        <option value="option3">Eucalipto Común</option>
-        <option value="option3">Acacia baracatinga</option>
+        <option value="option3">Urapan, Fresno</option>
+        <option value="option3">Cipres, Pino Cipres, Pino</option>
+        <option value="option3">Eucalipto Comun</option>
+        <option value="option3">Acacia baracatinga, acacia sabanera, acacia nigra</option>
         <option value="option3">Holly liso</option>
         <option value="option3">Hayuelo</option>
-        <option value="option3">Chicalá</option>
+        <option value="option3">Chicala, chirlobirlo, flor amarillo</option>
         <option value="option3">Caucho sabanero</option>
         <option value="option3">Eugenia</option>
-        <option value="option3">Palma yuca</option>
-        <option value="option3">Guayacán de Manizales</option>
-        <option value="option3">Arrayán blanco</option>
+        <option value="option3">Palma yuca, palmiche</option>
+        <option value="option3">Guayacan de Manizales</option>
+        <option value="option3">Arrayan blanco</option>
         <option value="option3">Cayeno</option>
-        <option value="option3">Caucho benjamín</option>
+        <option value="option3">Caucho benjamin</option>
         <option value="option3">Cerezo</option>
         <option value="option3">Falso pimiento</option>
         <option value="option3">Cucharo</option>
-        <option value="option3">Caballero de la noche</option>
+        <option value="option3">Caballero de la noche, Jazmin Dama de noche</option>
         <option value="option3">Corono</option>
-        <option value="option3">Aliso</option>
+        <option value="option3">Aliso, fresno, chaquiro</option>
         <option value="option3">Tomatillo</option>      
         <option value="option3">Araucaria</option>      
         <option value="option3">Tuno esmeraldo</option>      
-        <option value="option3">Pino pátula</option>      
-        <option value="option3">Sauce llorón</option>      
-      </select><br/><br/><br/>
+        <option value="option3">Pino patula</option>      
+        <option value="option3">Cerezo, capuli</option>      
+      </select><br/>
+      <h1 class="section">Localidad</h1>
+      <select id="localidadesMenu" onchange="filterByFeatures()">
+        <option value="option1">Ver Todos</option>
+        <option value="option1">Usaquén</option>
+        <option value="option1">Chapinero</option>
+        <option value="option1">Santa Fe</option>
+        <option value="option1">San Cristóbal</option>
+        <option value="option1">Usme</option>
+        <option value="option1">Tunjuelito</option>
+        <option value="option1">Bosa</option>
+        <option value="option1">Kennedy</option>
+        <option value="option1">Fontibón</option>
+        <option value="option1">Engativá</option>
+      </select><br/><br/>
+      <label id="alturaRangee" class="section">Altura</label>
+      <div class="slidecontainer">
+        <input type="range" min="1" max="50" value="25" class="slider" id="alturaRange" onchange="changeAltura(this.value)">
+      </div><br/><br/>
       <div id="map-overlay" class="map-overlay"></div>
     </div>
     <div id="credit">
