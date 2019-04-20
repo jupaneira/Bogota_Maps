@@ -26,15 +26,13 @@
     <div id="container">
       <div id="intro">
         <center>
-          <img src="Bogodata.png"/>
+          <a href="https://www.bogodata.com.co">
+            <img src="Bogodata.png"/>
+          </a>
           <h1>
             <div class="nextline">Arbolado Urbano de Bogotá</div>
           </h1>
         </center>
-        <!-- <p id="meme"> -->
-          <!-- Bogotá cuenta con más de 290 especies de árboles plantados a lo largo de -->
-          <!-- todo su territorio.<br /><a href="/blog/nyctrees">Read more.</a> -->
-        <!-- </p> -->
       </div>
       <h1 class="section">Especie</h1>
       <select id="especiesMenu" onchange="filterByFeatures()">
@@ -82,10 +80,19 @@
         <option value="option1">Kennedy</option>
         <option value="option1">Fontibón</option>
         <option value="option1">Engativá</option>
+        <option value="option1">Suba</option>
+        <option value="option1">Barrios Unidos</option>
+        <option value="option1">Teusaquillo</option>
+        <option value="option1">Los Mártires</option>
+        <option value="option1">Antonio Nariño</option>
+        <option value="option1">Puente Aranda</option>
+        <option value="option1">La Candelaria</option>
+        <option value="option1">Rafael Uribe Uribe</option>
+        <option value="option1">Ciudad Bolívar</option>
       </select><br/><br/>
-      <label id="alturaRangee" class="section">Altura</label>
+      <label id="alturaLabel" class="section">Altura (<29 mts)</label>
       <div class="slidecontainer">
-        <input type="range" min="1" max="50" value="25" class="slider" id="alturaRange" onchange="changeAltura(this.value)">
+        <input type="range" min="1" max="30" value="29" class="slider" id="alturaRange" onchange="changeAltura(this.value)">
       </div><br/><br/>
       <div id="map-overlay" class="map-overlay"></div>
     </div>

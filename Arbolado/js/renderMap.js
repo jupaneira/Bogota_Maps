@@ -94,12 +94,9 @@ map.on("load", function() {
     },
     "source-layer": "arboladobogotadepuradocodes",
     paint: {
-      // make circles larger as the user zooms from z12 to z22
       "circle-radius": {
         stops: [[12, 1.8], [22, 5]]
       },
-      // color circles by ethnicity, using a match expression
-      // https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-match
       "circle-color": [
         "to-string",
         ["at", ["to-number", ["get", "tree-code"]], ["literal", colors]]
@@ -136,7 +133,6 @@ function getFilter(fieldName, fieldValue, dataSet) {
 
 function filterByFeatures() {
   let filter1, filter2;
-
   let especiesMenu = document.getElementById("especiesMenu");
   let especie = especiesMenu.options[especiesMenu.selectedIndex].text;
   filter1 = getFilter("tree-code", especie, arboladoDataSet);
@@ -145,26 +141,29 @@ function filterByFeatures() {
   let localidad = localidadMenu.options[localidadMenu.selectedIndex].text;
   filter2 = getFilter("CODIGO_LOC", localidad, localidadesDataSet);
 
-  // Render found features in an overlay.
-  overlay.innerHTML = "";
+  if (especie != "Ver Todos") {
+    // Render found features in an overlay.
+    overlay.innerHTML = "";
+    var title = document.createElement("strong");
+    var imagen = document.createElement("img");
+    imagen.setAttribute("src", "images/" + especie + ".png");
+    imagen.setAttribute("id", "arbolito");
+    overlay.appendChild(title);
+    overlay.appendChild(imagen);
+    overlay.style.display = "block";
+  } else {
+    overlay.style.display = "none";
+  }
 
-  var title = document.createElement("strong");
-  // title.textContent = "Holly Liso";
-
-  var imagen = document.createElement("img");
-  imagen.setAttribute("src", "images/" + especie + ".png");
-  imagen.setAttribute("id", "arbolito");
-
-  overlay.appendChild(title);
-  overlay.appendChild(imagen);
-
-  overlay.style.display = "block";
-
-  // Add features that share the same county name to the highlighted layer.
   map.setFilter("trees", ["all", filter1, filter2]);
 }
 
 function changeAltura(value) {
-  let altura = document.getElementById("alturaRangee");
-  altura.innerText = "Altura ( < ".concat(value).concat(" mts)");
+  let alturaLabel = document.getElementById("alturaLabel");
+  alturaLabel.innerText = "Altura ( < ".concat(value).concat(" mts)");
+  map.setFilter("trees", [
+    "<=",
+    ["to-number", ["get", "ALTURA_TOT"]],
+    Number(value)
+  ]);
 }
